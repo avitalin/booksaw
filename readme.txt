@@ -1,73 +1,171 @@
-It is a free HTML CSS template by https://templatesjungle.com/
-You can use this template as a starter template and start building as you require.
+BookSaw - Online Bookstore
 
-The code is consistent and can be easily maintained as we have followed a good coding standard. We want everyone to easily understand it and modify it according to their requirement. As the main goal of providing these templates is to give you something to work on before even starting.
+Summary:
+1. Clear project overview and features
+2. Detailed setup instructions
+3. Tech stack information
+4. API documentation
+5. Security features
+6. Testing and deployment instructions
+7. Contributing guidelines
+8. Support information
+9. Future roadmap
 
-Preview URL: https://demo.templatesjungle.com/booksaw/
+A modern, full-stack online bookstore application that provides a seamless book shopping experience. Built with a responsive design and robust backend architecture.
 
-Get the Full Version here: 
-https://templatesjungle.gumroad.com/l/booksaw-free-html-bookstore-template
+ 🚀 Features
+
+- 📚 Comprehensive book catalog with search and filtering
+- 🛒 Shopping cart and wishlist functionality
+- 👤 User authentication and profile management
+- 📦 Order tracking and management
+- ⭐ Book reviews and ratings
+- 🔒 Secure payment processing
+- 📱 Responsive design for all devices
+- 🛡️ Enhanced security features
+
+ 🛠️ Tech Stack
+
+# Frontend
+- HTML5/CSS3
+- JavaScript (ES6+)
+- Bootstrap 5
+- Custom IcoMoon icons
+- TailwindCSS
+
+# Backend
+- Python/Flask
+- MySQL Database
+- JWT Authentication
+- RESTful API
+
+ 🏗️ Project Structure
+text
+booksaw/
+├── app/ # Backend Flask application
+│ ├── api/ # API endpoints
+│ ├── models/ # Database models
+│ └── utils/ # Utility functions
+├── public/ # Static assets
+│ ├── css/ # Stylesheets
+│ ├── js/ # JavaScript files
+│ └── images/ # Image assets
+├── database/ # Database migrations and schema
+└── docs/ # Documentation
 
 
-FREE FOR BOTH PERSONAL AND COMMERCIAL USE
+ 🚦 Getting Started
 
-This HTML Template is provided by TemplatesJungle.com and is free to use in both personal and commercial projects as long as you don't remove our credit link in the footer.
+# Prerequisites
 
-However, you can remove the credit link by paying for No Attribution version of the template.
+- Node.js (v14 or higher)
+- Python 3.8+
+- MySQL 8.0+
 
+#Installation
 
-RIGHTS
+1. Clone the repository
+bash
+git clone https://github.com/yourusername/booksaw.git
+cd booksaw
 
-You are allowed to use it in your personal projects and commercial projects.
+2. Set up the backend
+bash
+(Create and activate virtual environment)
+python -m venv venv
+source venv/bin/activate # On Windows: venv\Scripts\activate
 
-You can modify and sell it to your clients.
-
-
-PROHIBITIONS
-
-You cannot remove the credit link which links back to templatesjungle.com.
-
-You are not permitted to resell or redistribute (paid or free) as it is. 
-
-You cannot use it to build premium templates, themes or any other goods to be sold on marketplaces.
-
-If you want to share the free resource in your blog, you must point it to original TemplatesJungle.com resource page. 
-
-You cannot host the download file in your website.
+(Install dependencies)
+pip install -r requirements.txt
 
 
-SUPPORT
+3. Configure environment variables
+bash
+cp .env.example .env
+(Edit .env with your configuration)
 
-You can contact us to report any bugs and errors in the template. We will try and fix them immediately although it's a free resource.
 
-Feel free to let us know about what you want to see in the future downloads. We will definitely give it a thought while creating our next freebie.
+4. Set up the database
+bash
+mysql -u root -p < database/schema.sql
 
 
-CREDITS & REFERENCES
+5. Start the application
+bash
+(Start backend server)
+python run.py
+(In a new terminal, start frontend development server)
+npm install
+npm start
 
-https://getbootstrap.com/
 
-Stock Photos
-https://unsplash.com/
-https://www.freepik.com/
-https://www.pexels.com/
+ 🔐 Security Features
 
-Fonts
-Google fonts
-https://fonts.google.com/
+- JWT-based authentication
+- CSRF protection
+- XSS prevention
+- Rate limiting
+- Input validation
+- Secure password hashing
+- Protected API endpoints
 
-Icons
-https://icon-sets.iconify.design/
+ 📱 API Endpoints
 
-Bootstrap Framework
-https://getbootstrap.com/
+# Authentication
+- `POST /api/auth/register` - User registration
+- `POST /api/auth/login` - User login
+- `POST /api/auth/logout` - User logout
 
-JQuery Plugins
+# Books
+- `GET /api/books` - Get all books
+- `GET /api/books/:id` - Get book details
+- `POST /api/books/:id/reviews` - Add book review
 
-Swiper Slider - https://swiperjs.com/
-Chocolat.js – a Free Lightbox Plugin -http://chocolat.insipi.de/
-Magnific Lightbox - https://github.com/dimsemenov/Magnific-Popup
+# Orders
+- `POST /api/orders` - Create order
+- `GET /api/orders` - Get user orders
+- `GET /api/orders/:id` - Get order details
 
-Thanks for downloading from TemplatesJungle.com !
+ 🧪 Testing
+bash
+Run backend tests
+python -m pytest
+Run frontend tests
+npm test
+
+
+ 📦 Deployment
+
+The application can be deployed using Docker:
+bash
+docker-compose up -d
+
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+ 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+ 🙏 Acknowledgments
+
+- Template design by [TemplatesJungle](https://templatesjungle.com/)
+- Icons by [IcoMoon](https://icomoon.io/)
+- Bootstrap framework
+
+ 
+ 🔄 Roadmap
+
+- [ ] Implement real-time order tracking
+- [ ] Add recommendation system
+- [ ] Integrate multiple payment gateways
+- [ ] Add social login options
+- [ ] Implement PWA features
 
 
