@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Order Tracking - BookSaw</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" type="text/css" href="css/normalize.css" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+
+    <style>
+      .tracking-container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 0 20px;
+      }
+
+      .tracking-status {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 40px;
+        position: relative;
+      }
+
+      .status-point {
+        flex: 1;
+        text-align: center;
+        position: relative;
+        z-index: 1;
+      }
+
+      .status-point.active .point {
+        background: #28a745;
+      }
+
+      .status-point .point {
+        width: 30px;
+        height: 30px;
+        background: #ddd;
+        border-radius: 50%;
+        margin: 0 auto 10px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .status-line {
+        position: absolute;
+        top: 15px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #ddd;
+        z-index: 0;
+      }
+
+      .order-details {
+        background: white;
+        padding: 25px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .order-item {
+        display: flex;
+        align-items: center;
+        padding: 15px 0;
+        border-bottom: 1px solid #eee;
+      }
+
+      .order-item img {
+        width: 80px;
+        height: 100px;
+        object-fit: cover;
+        margin-right: 15px;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="tracking-container">
+      <h1 class="mb-4">Order Tracking</h1>
+
+      <div class="order-status mb-4">
+        <div class="tracking-status">
+          <div class="status-line"></div>
+          <div class="status-point active">
+            <div class="point"></div>
+            <div>Order Placed</div>
+          </div>
+          <div class="status-point">
+            <div class="point"></div>
+            <div>Processing</div>
+          </div>
+          <div class="status-point">
+            <div class="point"></div>
+            <div>Shipped</div>
+          </div>
+          <div class="status-point">
+            <div class="point"></div>
+            <div>Delivered</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="order-details">
+        <h3>Order #<span id="order-number"></span></h3>
+        <div id="order-items"></div>
+
+        <div class="mt-4">
+          <h4>Shipping Details</h4>
+          <div id="shipping-details"></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      class OrderTracker {
+        constructor(orderId) {
+          this.orderId = orderId;
+          this.init();
+        }
+
+        async init() {
+          await this.loadOrderDetails();
+          this.startTracking();
+        }
+
+        async loadOrderDetails() {
+          try {
+            const response = await fetch(`/api/orders/${this.orderId}`);
+            const order = await response.json();
+
+            this.updateOrderDisplay(order);
+            this.updateTrackingStatus(order.status);
+          } catch (error) {
+            console.error("Error loading order:", error);
+          }
+        }
+
+        updateOrderDisplay(order) {
+          document.getElementById("order-number").textContent = order.id;
+
+          const itemsHtml = order.items
+            .map(
+              (item) => `
+                    <div class="order-item">
+                        <img src="${item.image}" alt="${item.title}">
+                        <div>
+                            <h5>${item.title}</h5>
+                            <p>Quantity: ${item.quantity}</p>
+                            <p>Price: $${item.price.toFixed(2)}</p>
+                        </div>
+                    </div>
+                `
+            )
+            .join("");
+
+          document.getElementById("order-items").innerHTML = itemsHtml;
+
+          document.getElementById("shipping-details").innerHTML = `
+                    <p>Name: ${order.shipping.name}</p>
+                    <p>Address: ${order.shipping.address}</p>
+                    <p>City: ${order.shipping.city}</p>
+                    <p>State: ${order.shipping.state}</p>
+                    <p>ZIP: ${order.shipping.zip}</p>
+                `;
+        }
+
+        updateTrackingStatus(status) {
+          const statusPoints = document.querySelectorAll(".status-point");
+          const statusIndex = {
+            placed: 0,
+            processing: 1,
+            shipped: 2,
+            delivered: 3,
+          }[status];
+
+          statusPoints.forEach((point, index) => {
+            if (index <= statusIndex) {
+              point.classList.add("active");
+            }
+          });
+        }
+
+        startTracking() {
+          // 每5分鐘檢查一次訂單狀態
+          setInterval(() => this.loadOrderDetails(), 300000);
+        }
+      }
+
+      // 從URL獲取訂單ID並初始化追蹤器
+      const urlParams = new URLSearchParams(window.location.search);
+      const orderId = urlParams.get("orderId");
+
+      if (orderId) {
+        new OrderTracker(orderId);
+      } else {
+        alert("Order ID not found");
+      }
+    </script>
+  </body>
+</html>

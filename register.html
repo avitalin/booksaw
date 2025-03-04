@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Create Account - BookSaw Book Store</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token }}" />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" type="text/css" href="css/normalize.css" />
+    <link rel="stylesheet" type="text/css" href="icomoon/icomoon.css" />
+    <link rel="stylesheet" type="text/css" href="css/vendor.css" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+
+    <style>
+      .register-section {
+        background: #f8f9fa;
+        padding: 60px 0;
+        min-height: calc(100vh - 200px);
+      }
+
+      .auth-container {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 30px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-control {
+        height: 48px;
+        border: 1px solid #ddd;
+      }
+
+      .form-control:focus {
+        border-color: var(--primary);
+        box-shadow: none;
+      }
+
+      .btn-primary {
+        height: 48px;
+        font-weight: 500;
+        background: var(--primary);
+        border: none;
+      }
+
+      .btn-primary:hover {
+        background: var(--primary-dark);
+      }
+
+      .auth-links {
+        margin-top: 20px;
+        text-align: center;
+      }
+
+      .auth-links a {
+        color: var(--primary);
+        text-decoration: none;
+      }
+
+      .auth-links a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header Section -->
+    <header id="header">
+      <div class="header-wrap">
+        <nav class="primary-nav">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-4">
+                <div class="main-logo">
+                  <a href="index.html">
+                    <img src="images/main-logo.png" alt="logo" />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <section class="register-section">
+      <div class="auth-container">
+        <h2 class="text-center mb-4">Create Account</h2>
+        <form id="registerForm">
+          <div class="form-group">
+            <label for="name">Full Name</label>
+            <input type="text" class="form-control" id="name" required />
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" class="form-control" id="email" required />
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input
+              type="password"
+              class="form-control"
+              id="password"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="confirmPassword">Confirm Password</label>
+            <input
+              type="password"
+              class="form-control"
+              id="confirmPassword"
+              required
+            />
+          </div>
+          <button type="submit" class="btn btn-primary w-100">
+            Create Account
+          </button>
+        </form>
+        <div class="auth-links">
+          <p>Already have an account? <a href="login.html">Sign In</a></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer id="footer">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="footer-item">
+              <div class="company-brand">
+                <img
+                  src="images/main-logo.png"
+                  alt="logo"
+                  class="footer-logo"
+                />
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="js/auth.js" type="module"></script>
+    <script src="js/security.js" type="module"></script>
+    <script>
+      // Handle form submission
+      document
+        .getElementById("registerForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const name = document.getElementById("name").value;
+          const email = document.getElementById("email").value;
+          const password = document.getElementById("password").value;
+          const confirmPassword =
+            document.getElementById("confirmPassword").value;
+
+          if (password !== confirmPassword) {
+            alert("Passwords do not match");
+            return;
+          }
+
+          try {
+            const response = await fetch("/api/auth/register", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-Token": document.querySelector(
+                  'meta[name="csrf-token"]'
+                ).content,
+              },
+              body: JSON.stringify({ name, email, password }),
+            });
+
+            if (response.ok) {
+              // Show success message
+              alert("Registration successful! Please sign in.");
+              // Redirect to account page
+              window.location.href = "account.html";
+            } else {
+              const error = await response.json();
+              alert(error.message || "Registration failed. Please try again.");
+            }
+          } catch (error) {
+            console.error("Registration error:", error);
+            alert("An error occurred. Please try again later.");
+          }
+        });
+    </script>
+  </body>
+</html>

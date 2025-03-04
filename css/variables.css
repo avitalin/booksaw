@@ -1,0 +1,29 @@
+:root {
+  /* widths for rows and containers */
+  --header-height: 160px;
+  --header-height-min: 80px;
+  
+  /* Primary Colors */
+  --primary: #8B7355;          /* Deep Brown */
+  --primary-light: #D4C4B7;    /* Light Brown */
+  --primary-dark: #5C4033;     /* Dark Coffee */
+  --accent: #DEB887;           /* Light Wood */
+  
+  /* Background Colors */
+  --background: #FFF8DC;       /* Cream */
+  --background-light: #FDFBF6; /* Light Cream */
+  --background-dark: #F5ECD7;  /* Dark Cream */
+  
+  /* Text Colors */
+  --text: #4A3728;            /* Deep Brown Text */
+  --text-light: #8B7355;      /* Light Brown Text */
+  --text-muted: #A69886;      /* Secondary Text */
+  
+  /* Borders and Shadows */
+  --border: #D2B48C;          /* Light Brown Border */
+  --shadow: rgba(139, 115, 85, 0.15);
+  
+  /* Interactive Effects */
+  --hover: #F5DEB3;           /* Hover Effect */
+  --active: #DAA520;          /* Click Effect */
+} 

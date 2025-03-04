@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Shopping Cart - BookSaw</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" type="text/css" href="css/normalize.css" />
+    <link rel="stylesheet" type="text/css" href="icomoon/icomoon.css" />
+    <link rel="stylesheet" type="text/css" href="css/vendor.css" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+
+    <style>
+      .cart-container {
+        background: var(--bg-white);
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: var(--shadow-md);
+      }
+
+      .cart-item {
+        display: flex;
+        align-items: center;
+        padding: 20px;
+        border-bottom: 1px solid #eee;
+        background: #fff;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .cart-item img {
+        width: 120px;
+        height: 160px;
+        object-fit: cover;
+        margin-right: 20px;
+        border-radius: 4px;
+      }
+
+      .cart-item-info {
+        flex-grow: 1;
+      }
+
+      .cart-item-info h3 {
+        margin: 0 0 10px;
+        font-size: 1.2em;
+        color: #333;
+      }
+
+      .quantity-controls {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 15px;
+      }
+
+      .quantity-controls button {
+        padding: 8px 15px;
+        border: 1px solid #ddd;
+        background: #fff;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: all 0.3s ease;
+      }
+
+      .quantity-controls button:hover {
+        background: #f5f5f5;
+      }
+
+      .remove-item {
+        color: #dc3545;
+        border-color: #dc3545 !important;
+      }
+
+      .remove-item:hover {
+        background: #dc3545 !important;
+        color: #fff;
+      }
+
+      .cart-summary {
+        background: #fff;
+        padding: 25px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .cart-summary h3 {
+        margin-bottom: 20px;
+        color: #333;
+      }
+
+      #checkout-button {
+        width: 100%;
+        padding: 12px;
+        font-size: 1.1em;
+        margin-top: 20px;
+      }
+
+      .empty-cart {
+        text-align: center;
+        padding: 40px 20px;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .continue-shopping {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 10px 25px;
+        background: #007bff;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: background 0.3s ease;
+      }
+
+      .continue-shopping:hover {
+        background: #0056b3;
+        color: #fff;
+      }
+
+      .cart-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+      }
+
+      .cart-header h1 {
+        font-size: 2em;
+        color: #333;
+      }
+
+      .cart-grid {
+        display: grid;
+        grid-template-columns: 1fr 350px;
+        gap: 30px;
+      }
+
+      .item-total {
+        font-size: 1.2em;
+        font-weight: 600;
+        color: #333;
+        min-width: 100px;
+        text-align: right;
+      }
+
+      .quantity-badge {
+        background: #f8f9fa;
+        padding: 5px 15px;
+        border-radius: 15px;
+        font-weight: 500;
+      }
+
+      .checkout-button {
+        background: #4caf50;
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 8px;
+        font-size: 1.1em;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        width: 100%;
+      }
+
+      .checkout-button:hover {
+        background: #45a049;
+      }
+
+      .cart-summary-details {
+        margin: 20px 0;
+        padding: 15px 0;
+        border-top: 1px solid #eee;
+        border-bottom: 1px solid #eee;
+      }
+
+      .summary-row {
+        display: flex;
+        justify-content: space-between;
+        margin: 10px 0;
+        color: #666;
+      }
+
+      .summary-total {
+        font-size: 1.3em;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .address-section {
+        border-bottom: 1px solid #eee;
+        padding-bottom: 1rem;
+      }
+
+      .shipping-info {
+        font-size: 0.875rem;
+        color: #6c757d;
+        padding-top: 0.5rem;
+        border-top: 1px dashed #dee2e6;
+      }
+
+      .summary-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+      }
+
+      .summary-total {
+        font-size: 1.25rem;
+        font-weight: 600;
+        border-top: 2px solid #dee2e6;
+        margin-top: 0.5rem;
+        padding-top: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header Section -->
+    <div id="header-wrap">
+      <div class="top-content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="social-links">
+                <ul>
+                  <li>
+                    <a href="#"><i class="icon icon-facebook"></i></a>
+                  </li>
+                  <li>
+                    <a href="#"><i class="icon icon-twitter"></i></a>
+                  </li>
+                  <li>
+                    <a href="#"><i class="icon icon-youtube-play"></i></a>
+                  </li>
+                  <li>
+                    <a href="#"><i class="icon icon-behance-square"></i></a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="right-element">
+                <a href="#" class="user-account for-buy"
+                  ><i class="icon icon-user"></i><span>Account</span></a
+                >
+                <a href="cart.html" class="cart for-buy"
+                  ><i class="icon icon-clipboard"></i><span>Cart:(0 $)</span></a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <header id="header">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-2">
+              <div class="main-logo">
+                <a href="index.html"
+                  ><img src="images/main-logo.png" alt="logo"
+                /></a>
+              </div>
+            </div>
+            <div class="col-md-10">
+              <nav id="navbar">
+                <div class="main-menu stellarnav">
+                  <ul class="menu-list">
+                    <li class="menu-item"><a href="index.html">Home</a></li>
+                    <li class="menu-item">
+                      <a href="#featured-books">Featured</a>
+                    </li>
+                    <li class="menu-item">
+                      <a href="#popular-books">Popular</a>
+                    </li>
+                    <li class="menu-item">
+                      <a href="#special-offer">Offer</a>
+                    </li>
+                  </ul>
+                </div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </header>
+    </div>
+
+    <!-- Cart Section -->
+    <div class="cart-container">
+      <div class="cart-header">
+        <h1>Shopping Cart</h1>
+        <span class="quantity-badge">
+          <span id="cart-count">0</span> items
+        </span>
+      </div>
+
+      <div class="cart-grid">
+        <div id="cart-items">
+          <!-- Cart items will be dynamically added here -->
+        </div>
+
+        <div class="cart-summary">
+          <h3>Order Summary</h3>
+
+          <!-- 添加地址選擇 -->
+          <div class="address-section mb-4">
+            <label for="shipping-address" class="form-label"
+              >Shipping Address</label
+            >
+            <select
+              id="shipping-address"
+              class="form-select"
+              onchange="updateCartTotals()"
+            >
+              <option value="">Select address...</option>
+              <!-- 地址選項會動態添加 -->
+            </select>
+            <button class="btn btn-link mt-2" onclick="showAddAddressModal()">
+              + Add New Address
+            </button>
+          </div>
+
+          <div class="cart-summary-details">
+            <div class="summary-row">
+              <span>Subtotal</span>
+              <span id="subtotal">$0.00</span>
+            </div>
+
+            <div class="summary-row">
+              <span>Shipping</span>
+              <span id="shipping-cost">Calculating...</span>
+            </div>
+
+            <div class="summary-row">
+              <span>Estimated Tax</span>
+              <span id="tax-amount">Calculating...</span>
+            </div>
+
+            <div class="summary-row summary-total">
+              <span>Total</span>
+              <span id="cart-total">$0.00</span>
+            </div>
+
+            <!-- 添加運費說明 -->
+            <div class="shipping-info mt-3">
+              <small class="text-muted">
+                Free shipping on orders over $100
+              </small>
+            </div>
+          </div>
+
+          <button id="checkout-button" class="checkout-button" disabled>
+            Proceed to Checkout
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 添加新地址的 Modal -->
+    <div class="modal fade" id="addressModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Add New Address</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="address-form">
+              <div class="mb-3">
+                <label class="form-label">Full Name</label>
+                <input type="text" class="form-control" required />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Street Address</label>
+                <input type="text" class="form-control" required />
+              </div>
+              <div class="row mb-3">
+                <div class="col">
+                  <label class="form-label">City</label>
+                  <input type="text" class="form-control" required />
+                </div>
+                <div class="col">
+                  <label class="form-label">State</label>
+                  <input type="text" class="form-control" required />
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col">
+                  <label class="form-label">ZIP Code</label>
+                  <input type="text" class="form-control" required />
+                </div>
+                <div class="col">
+                  <label class="form-label">Country</label>
+                  <select class="form-select" required>
+                    <option value="US">United States</option>
+                    <option value="CA">Canada</option>
+                    <!-- 添加更多國家選項 -->
+                  </select>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              onclick="saveAddress()"
+            >
+              Save Address
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer id="footer">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="footer-menu">
+              <h5>About Us</h5>
+              <p>Providing quality books and excellent shopping experience.</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="footer-menu">
+              <h5>Discover</h5>
+              <ul class="menu-list">
+                <li class="menu-item"><a href="#">Books</a></li>
+                <li class="menu-item"><a href="#">Authors</a></li>
+                <li class="menu-item"><a href="#">Subjects</a></li>
+                <li class="menu-item"><a href="#">Advanced Search</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="footer-menu">
+              <h5>My Account</h5>
+              <ul class="menu-list">
+                <li class="menu-item"><a href="#">Sign In</a></li>
+                <li class="menu-item"><a href="#">View Cart</a></li>
+                <li class="menu-item"><a href="#">My Wishlist</a></li>
+                <li class="menu-item"><a href="#">Track My Order</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <div id="footer-bottom">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="copyright">
+              <div class="row">
+                <div class="col-md-6">
+                  <p>© 2024 All rights reserved.</p>
+                </div>
+                <div class="col-md-6">
+                  <div class="social-links align-right">
+                    <ul>
+                      <li>
+                        <a href="#"><i class="icon icon-facebook"></i></a>
+                      </li>
+                      <li>
+                        <a href="#"><i class="icon icon-twitter"></i></a>
+                      </li>
+                      <li>
+                        <a href="#"><i class="icon icon-youtube-play"></i></a>
+                      </li>
+                      <li>
+                        <a href="#"><i class="icon icon-behance-square"></i></a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/jquery-1.11.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/plugins.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/cart.js"></script>
+    <script>
+      function displayCart() {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const cartItemsContainer = document.getElementById("cart-items");
+        const cartTotalElement = document.getElementById("cart-total");
+        const subtotalElement = document.getElementById("subtotal");
+        const cartCountElement = document.getElementById("cart-count");
+
+        if (cart.length === 0) {
+          cartItemsContainer.innerHTML = `
+            <div class="empty-cart">
+              <h3>Your cart is empty</h3>
+              <p>Looks like you haven't added any books to your cart yet.</p>
+              <a href="index.html" class="continue-shopping">Continue Shopping</a>
+            </div>
+          `;
+          cartTotalElement.innerHTML = "$0.00";
+          subtotalElement.innerHTML = "$0.00";
+          cartCountElement.innerHTML = "0";
+          return;
+        }
+
+        let total = 0;
+        cartCountElement.innerHTML = cart.reduce(
+          (sum, item) => sum + item.quantity,
+          0
+        );
+
+        cartItemsContainer.innerHTML = cart
+          .map((item) => {
+            total += item.price * item.quantity;
+            return `
+            <div class="cart-item" data-product-id="${item.id}">
+              <img src="${item.image}" alt="${item.title}">
+              <div class="cart-item-info">
+                <h3>${item.title}</h3>
+                <p>Price: $${item.price.toFixed(2)}</p>
+                <div class="quantity-controls">
+                  <button onclick="updateQuantity('${item.id}', ${
+              item.quantity - 1
+            })" 
+                          ${item.quantity <= 1 ? "disabled" : ""}>-</button>
+                  <span>${item.quantity}</span>
+                  <button onclick="updateQuantity('${item.id}', ${
+              item.quantity + 1
+            })">+</button>
+                  <button onclick="removeItem('${
+                    item.id
+                  }')" class="remove-item">Remove</button>
+                </div>
+              </div>
+              <div class="item-total">
+                $${(item.price * item.quantity).toFixed(2)}
+              </div>
+            </div>
+          `;
+          })
+          .join("");
+
+        subtotalElement.innerHTML = `$${total.toFixed(2)}`;
+        cartTotalElement.innerHTML = `$${total.toFixed(2)}`;
+      }
+
+      function updateQuantity(productId, newQuantity) {
+        const cart = new Cart();
+        const itemElement = document.querySelector(
+          `[data-product-id="${productId}"]`
+        );
+
+        if (itemElement) {
+          itemElement.style.transition = "background-color 0.3s";
+          itemElement.style.backgroundColor = "#f8f9fa";
+
+          setTimeout(() => {
+            cart.updateQuantity(productId, newQuantity);
+            displayCart();
+            itemElement.style.backgroundColor = "";
+          }, 150);
+        }
+      }
+
+      function removeItem(productId) {
+        const cart = new Cart();
+        const itemElement = document.querySelector(
+          `[data-product-id="${productId}"]`
+        );
+
+        if (itemElement) {
+          itemElement.style.transition = "opacity 0.3s, transform 0.3s";
+          itemElement.style.opacity = "0";
+          itemElement.style.transform = "translateX(20px)";
+
+          setTimeout(() => {
+            cart.removeItem(productId);
+            displayCart();
+          }, 300);
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        displayCart();
+
+        document
+          .getElementById("checkout-button")
+          .addEventListener("click", () => {
+            window.location.href = "checkout.html";
+          });
+      });
+
+      const cart = new Cart();
+
+      // 更新購物車總額
+      function updateCartTotals() {
+        const addressSelect = document.getElementById("shipping-address");
+        const selectedAddress = addressSelect.value
+          ? JSON.parse(addressSelect.value)
+          : null;
+
+        const subtotal = cart.calculateSubtotal();
+        const shipping = cart.calculateShipping(selectedAddress);
+        const tax = cart.calculateTax(selectedAddress);
+        const total = subtotal + shipping + tax;
+
+        // 更新顯示
+        document.getElementById("subtotal").textContent = `$${subtotal.toFixed(
+          2
+        )}`;
+        document.getElementById("shipping-cost").textContent =
+          shipping === 0 ? "FREE" : `$${shipping.toFixed(2)}`;
+        document.getElementById("tax-amount").textContent = `$${tax.toFixed(
+          2
+        )}`;
+        document.getElementById("cart-total").textContent = `$${total.toFixed(
+          2
+        )}`;
+
+        // 啟用/禁用結帳按鈕
+        const checkoutButton = document.getElementById("checkout-button");
+        checkoutButton.disabled = !selectedAddress;
+      }
+
+      // 顯示添加地址 Modal
+      function showAddAddressModal() {
+        const modal = new bootstrap.Modal(
+          document.getElementById("addressModal")
+        );
+        modal.show();
+      }
+
+      // 保存新地址
+      async function saveAddress() {
+        const form = document.getElementById("address-form");
+        if (!form.checkValidity()) {
+          form.reportValidity();
+          return;
+        }
+
+        try {
+          const formData = new FormData(form);
+          const address = Object.fromEntries(formData.entries());
+
+          // 發送到服務器
+          await secureRequest("/api/addresses", {
+            method: "POST",
+            body: JSON.stringify(address),
+          });
+
+          // 重新加載地址列表
+          await loadAddresses();
+
+          // 關閉 Modal
+          bootstrap.Modal.getInstance(
+            document.getElementById("addressModal")
+          ).hide();
+
+          showNotification("Address saved successfully");
+        } catch (error) {
+          showNotification(error.message, "error");
+        }
+      }
+
+      // 加載用戶地址
+      async function loadAddresses() {
+        try {
+          const addresses = await secureRequest("/api/addresses");
+          const addressSelect = document.getElementById("shipping-address");
+
+          addressSelect.innerHTML =
+            '<option value="">Select address...</option>' +
+            addresses
+              .map(
+                (addr) => `
+              <option value='${JSON.stringify(addr)}'>
+                ${addr.street}, ${addr.city}, ${addr.state} ${addr.zip}
+              </option>
+            `
+              )
+              .join("");
+        } catch (error) {
+          console.error("Failed to load addresses:", error);
+        }
+      }
+
+      // 初始化
+      document.addEventListener("DOMContentLoaded", () => {
+        loadAddresses();
+        updateCartTotals();
+      });
+    </script>
+  </body>
+</html>

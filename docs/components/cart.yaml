@@ -1,0 +1,42 @@
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/CartItem"
+        totalAmount:
+          type: number
+          example: 299.99
+        updatedAt:
+          type: string
+          format: date-time
+
+    CartItem:
+      type: object
+      properties:
+        product:
+          $ref: "#/components/schemas/Product"
+        quantity:
+          type: number
+          minimum: 1
+          example: 2
+        price:
+          type: number
+          example: 149.99
+
+    CartItemRequest:
+      type: object
+      required:
+        - productId
+        - quantity
+      properties:
+        productId:
+          type: string
+          example: "5f7d3a2e9d3e2a1b3c4d5e6f"
+        quantity:
+          type: number
+          minimum: 1
+          example: 1
