@@ -1,8 +1,25 @@
 import { api } from '../utils/api';
 
 export const fetchCart = async () => {
-  const response = await api.get('/cart');
-  return response.data;
+  try {
+    const response = await fetch('/api/cart', {
+      headers: {
+        'Content-Type': 'application/json',
+        // 如果需要認證
+        // 'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch cart');
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching cart:', error);
+    return { items: [] }; // 返回空購物車作為默認值
+  }
 };
 
 export const addToCart = async (productId, quantity = 1) => {

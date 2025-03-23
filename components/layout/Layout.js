@@ -1,14 +1,17 @@
 import Navbar from './Navbar';
-import Footer from './Footer';
 
 const Layout = ({ children }) => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <main className="flex-grow">
+      <main className="flex-grow container mx-auto px-4 py-8">
         {children}
       </main>
-      <Footer />
+      <footer className="bg-gray-100">
+        <div className="container mx-auto px-4 py-6 text-center text-gray-600">
+          © 2024 書籍商城. All rights reserved.
+        </div>
+      </footer>
     </div>
   );
 };
