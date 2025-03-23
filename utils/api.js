@@ -3,8 +3,7 @@ import { mockProducts } from './mockData';
 // Simulate API delay
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-// Mock API service
-export const api = {
+class Api {
   async get(endpoint) {
     await delay(500); // Simulate network delay
     
@@ -16,7 +15,7 @@ export const api = {
       default:
         throw new Error(`Endpoint ${endpoint} not found`);
     }
-  },
+  }
 
   async post(endpoint, data) {
     await delay(500);
@@ -30,7 +29,7 @@ export const api = {
       default:
         throw new Error(`Endpoint ${endpoint} not found`);
     }
-  },
+  }
 
   async put(endpoint, data) {
     await delay(500);
@@ -45,7 +44,7 @@ export const api = {
       return cart;
     }
     throw new Error(`Endpoint ${endpoint} not found`);
-  },
+  }
 
   async delete(endpoint) {
     await delay(500);
@@ -59,6 +58,8 @@ export const api = {
     }
     throw new Error(`Endpoint ${endpoint} not found`);
   }
-};
+}
+
+export const api = new Api();
 
 export default api; 
