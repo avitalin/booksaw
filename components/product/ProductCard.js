@@ -29,9 +29,9 @@ const ProductCard = ({ product }) => {
       setAdding(true);
       await addToCart(product.id);
       await updateCartCount();
-      toast.success('已加入購物車');
+      toast.success('Added to cart successfully');
     } catch (error) {
-      toast.error('加入購物車失敗');
+      toast.error('Failed to add to cart');
       console.error('Failed to add to cart:', error);
     } finally {
       setAdding(false);
@@ -43,9 +43,10 @@ const ProductCard = ({ product }) => {
     try {
       await InventoryAPI.subscribeToStock(product.id, email);
       setShowNotifyModal(false);
-      alert('You will be notified when the item is back in stock!');
+      toast.success('You will be notified when the item is back in stock!');
     } catch (error) {
       console.error('Error subscribing to stock:', error);
+      toast.error('Failed to subscribe to stock notifications');
     }
   };
 
@@ -73,14 +74,14 @@ const ProductCard = ({ product }) => {
       {/* Add to Cart Button */}
       <button
         onClick={handleAddToCart}
-        disabled={!stockStatus?.inStock}
+        disabled={!stockStatus?.inStock || adding}
         className={`w-full py-2 rounded-md ${
-          stockStatus?.inStock
+          stockStatus?.inStock && !adding
             ? 'bg-primary text-white hover:bg-primary-dark'
             : 'bg-gray-300 cursor-not-allowed'
         }`}
       >
-        {stockStatus?.inStock ? 'Add to Cart' : 'Out of Stock'}
+        {adding ? 'Adding...' : stockStatus?.inStock ? 'Add to Cart' : 'Out of Stock'}
       </button>
 
       {/* Notify Me Button */}
