@@ -1,16 +1,16 @@
-import { CartProvider } from '../contexts/CartContext';
+import { AuthProvider } from '../hooks/useAuth';
 import { Toaster } from 'react-hot-toast';
 import Layout from '../components/layout/Layout';
 import '../styles/globals.css';
 
 function MyApp({ Component, pageProps }) {
   return (
-    <CartProvider>
+    <AuthProvider>
       <Layout>
         <Component {...pageProps} />
-        <Toaster position="top-right" />
+        <Toaster position="top-center" />
       </Layout>
-    </CartProvider>
+    </AuthProvider>
   );
 }
 

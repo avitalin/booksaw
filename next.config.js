@@ -19,4 +19,7 @@ module.exports = {
 
   // Netlify specific configuration
   output: 'standalone',
+  
+  // Transpile @heroicons/react
+  transpilePackages: ['@heroicons/react']
 } 
