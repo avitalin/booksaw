@@ -1,8 +1,9 @@
 import { api } from '../utils/api';
 
-export const fetchProducts = async () => {
-  const response = await api.get('/products');
-  return response.data;
+export const productService = {
+  async getProducts() {
+    return await api.get('/products');
+  }
 };
 
 export const fetchProductById = async (id) => {
